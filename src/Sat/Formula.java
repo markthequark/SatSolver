@@ -1,6 +1,7 @@
 package Sat;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Formula extends ArrayList<Clause> {
 
@@ -27,10 +28,10 @@ public class Formula extends ArrayList<Clause> {
       for (Literal literal : clause) {
         sb.append(literal.toString()).append(" ");
       }
-      sb.deleteCharAt(sb.length()-1);
+      sb.deleteCharAt(sb.length() - 1);
       sb.append(")\n");
     }
-    sb.deleteCharAt(sb.length()-1);
+    sb.deleteCharAt(sb.length() - 1);
     sb.append(")\n");
 
     sb.replace(5, 9, "");

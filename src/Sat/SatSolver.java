@@ -1,6 +1,9 @@
 package Sat;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class SatSolver {
   public static void main(String[] args) {
@@ -20,7 +23,7 @@ public class SatSolver {
 
   private static boolean solve(Formula formula) {
     formula.sort(Comparator.comparingInt(Clause::size));
-    System.out.println("solving\n"+formula.toString());
+    System.out.println("solving\n" + formula.toString());
 
     // tree of atom-value guesses
     BinaryTree guessTree = new BinaryTree();
@@ -34,7 +37,8 @@ public class SatSolver {
       if (guessTree.root.isUnsat())
         return false;
 
-      unitPropagation: // loop allows multiple atoms to be determined via unit propagation
+      // loop allows multiple atoms to be determined via unit propagation
+      unitPropagation:
       while (true) {
         for (Clause clause : formula) {
           if (clause.isSatisfied() || clause.isSatisfied(atomValues))
@@ -78,7 +82,7 @@ public class SatSolver {
         Atom unknownAtom = clause.unknownLiterals(atomValues).get(0).getAtom();
         guessTree = guessTree.addChild(unknownAtom, true);
         atomValues.put(unknownAtom, true);
-        System.out.println("guessing "+unknownAtom+" is true");
+        System.out.println("guessing " + unknownAtom + " is true");
         break;
       }
     }

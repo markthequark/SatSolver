@@ -10,7 +10,7 @@ import java.util.Map;
 /**
  * leaf nodes with value false are assigned to left.
  * leaf nodes with value true are assigned to right.
- *
+ * <p>
  * nodes hold an atom, and it's associated value guess
  * both child nodes of a single parent must have the same atom, this is enforced
  */
@@ -21,7 +21,7 @@ public class BinaryTree {
 
   @Nullable
   private final BinaryTree parent;
-  private  BinaryTree left;
+  private BinaryTree left;
   private BinaryTree right;
 
   private Atom atom;
@@ -45,7 +45,7 @@ public class BinaryTree {
 
   public BinaryTree addChild(Atom atom, boolean value) {
     BinaryTree result;
-    if(value)
+    if (value)
       result = right == null ? right = new BinaryTree(this, atom, value) : right;
     else
       result = left == null ? left = new BinaryTree(this, atom, value) : left;
@@ -56,18 +56,6 @@ public class BinaryTree {
       throw new InvalidStateException("atoms on equal level of binary tree must be equal");
 
     return result;
-  }
-
-  public boolean isUnsat() {
-    return unsat;
-  }
-
-  public Atom getAtom() {
-    return atom;
-  }
-
-  public boolean getValue() {
-    return value;
   }
 
   public BinaryTree reverseGuess(Map<Atom, Boolean> knownValues, ImplicationGraph implicationGraph) {
@@ -111,5 +99,17 @@ public class BinaryTree {
     }
     // else if both values determined to be unsat, reverse guess of parent
     return parent.reverseGuess(knownValues, implicationGraph);
+  }
+
+  public boolean isUnsat() {
+    return unsat;
+  }
+
+  public Atom getAtom() {
+    return atom;
+  }
+
+  public boolean getValue() {
+    return value;
   }
 }

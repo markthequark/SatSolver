@@ -16,14 +16,6 @@ public class Clause extends HashSet<Literal> {
     super(collection);
   }
 
-  public boolean isSatisfied() {
-    return satisfied;
-  }
-
-  public void setSatisfied(boolean satisfied) {
-    this.satisfied = satisfied;
-  }
-
   /**
    * returns a list of all literals in this clause whose values
    * are not present in the passed map
@@ -68,5 +60,13 @@ public class Clause extends HashSet<Literal> {
   @Override
   public int hashCode() {
     return Objects.hash(this.toArray());
+  }
+
+  public boolean isSatisfied() {
+    return satisfied;
+  }
+
+  public void setSatisfied(boolean satisfied) {
+    this.satisfied = satisfied;
   }
 }

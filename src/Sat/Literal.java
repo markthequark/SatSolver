@@ -60,7 +60,7 @@ public class Literal {
 
   @Override
   public String toString() {
-    return isNegated() ? "¬"+atom.toString() : atom.toString();
+    return isNegated() ? "¬" + atom.toString() : atom.toString();
   }
 
   public Atom getAtom() {
