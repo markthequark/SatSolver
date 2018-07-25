@@ -63,12 +63,6 @@ public class BinaryTree {
     if (this == this.root)
       return this;
 
-    System.out.println(knownValues.toString());
-    System.out.println(implicationGraph.implies.toString());
-    System.out.println(atom);
-    System.out.println(value);
-    System.exit(1);
-
     // remove all data gained from current guess
     LinkedList<Atom> impliedAtoms = new LinkedList<>();
     impliedAtoms.add(atom);
