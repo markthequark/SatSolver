@@ -1,4 +1,4 @@
-package DataStructures;
+package Sat;
 
 import Sat.Atom;
 import Sat.Clause;

@@ -1,9 +1,4 @@
-import DataStructures.BinaryTree;
-import DataStructures.ImplicationGraph;
-import Sat.Atom;
-import Sat.Literal;
-import Sat.Clause;
-import Sat.Formula;
+package Sat;
 
 import java.util.*;
 
