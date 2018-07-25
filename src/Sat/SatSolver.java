@@ -19,19 +19,18 @@ public class SatSolver {
   }
 
   private static boolean solve(Formula formula) {
-    Collections.sort(formula, Comparator.comparingInt(Clause::size));
+    formula.sort(Comparator.comparingInt(Clause::size));
     System.out.println("solving\n"+formula.toString());
 
     // tree of atom-value guesses
     BinaryTree guessTree = new BinaryTree();
-    // graph of atom-value pairs determined from known values
+    // graph of atom-value pairs determined from known atom-value pairs
     ImplicationGraph implicationGraph = new ImplicationGraph();
     // current accepted atom-value pairs
-    Map<Atom, Boolean> knownValues = new HashMap<>();
+    Map<Atom, Boolean> atomValues = new HashMap<>();
 
     main:
     while (true) {
-      // check for unsat state
       if (guessTree.root.isUnsat())
         return false;
 
@@ -40,43 +39,42 @@ public class SatSolver {
         for (Clause clause : formula) {
           if (clause.isSatisfied())
             continue;
-          if (clause.checkIfSat(knownValues)) {
+          if (clause.checkIfSat(atomValues)) {
             clause.setSatisfied(true);
             continue;
           }
 
-          List<Literal> unknownLiterals = clause.unknownLiterals(knownValues);
+          List<Literal> unknownLiterals = clause.unknownLiterals(atomValues);
           if (unknownLiterals.size() == 0) {
-            if (clause.checkIfSat(knownValues)) {
+            if (clause.checkIfSat(atomValues)) {
               clause.setSatisfied(true);
               continue;
             } else {
-              // conflict
-              // undoes previous guess, makes a new one and corrects the map and graph accordingly
+              // if here, clause evaluates to false
+              // undoes previous atom-value guess, and makes a new one
               System.out.println("reversing guess of " + guessTree.getAtom() + "=" + guessTree.getValue());
-              guessTree = guessTree.reverseGuess(knownValues, implicationGraph);
+              guessTree = guessTree.reverseGuess(atomValues, implicationGraph);
               continue main;
-
             }
           }
           if (unknownLiterals.size() == 1) {
-            // can determine last atom in clause via unit propagation
+            // if here, can determine last atom in clause via unit propagation
             Literal unknownLiteral = unknownLiterals.get(0);
-            if (knownValues.containsKey(unknownLiteral.getAtom())) {
+            if (atomValues.containsKey(unknownLiteral.getAtom())) {
               //TODO: check if possible
               System.out.println("ERROR SHOULD NEVER OCCUR");
-              // conflict
-              // undoes previous guess, makes a new one and corrects the map and graph accordingly
-              guessTree.reverseGuess(knownValues, implicationGraph);
+              // if here, clause evaluates to false
+              // undoes previous atom-value guess, and makes a new one
+              guessTree.reverseGuess(atomValues, implicationGraph);
               continue main;
             } else {
               // no conflict
-              System.out.println("unit propagation, " + clause + " with " + knownValues);
+              System.out.println("unit propagation, " + clause + " with " + atomValues);
               implicationGraph.implies(clause, unknownLiteral.getAtom());
               if (unknownLiteral.isNegated())
-                knownValues.put(unknownLiteral.getAtom(), false);
+                atomValues.put(unknownLiteral.getAtom(), false);
               else
-                knownValues.put(unknownLiteral.getAtom(), true);
+                atomValues.put(unknownLiteral.getAtom(), true);
               clause.setSatisfied(true);
               continue unitPropagation;
             }
@@ -85,7 +83,6 @@ public class SatSolver {
         break;
       }
 
-      // check for solved state
       checkSolved:
       while (true) {
         for (Clause clause : formula)
@@ -94,13 +91,13 @@ public class SatSolver {
         return true;
       }
 
-      // pick & guess a variable
+      // cannot continue with unit propagation, therefor, pick & guess a variable
       for (Clause clause : formula) {
         if (clause.isSatisfied())
           continue;
-        Atom unknownAtom = clause.unknownLiterals(knownValues).get(0).getAtom();
+        Atom unknownAtom = clause.unknownLiterals(atomValues).get(0).getAtom();
         guessTree = guessTree.addChild(unknownAtom, true);
-        knownValues.put(unknownAtom, true);
+        atomValues.put(unknownAtom, true);
         System.out.println("guessing "+unknownAtom+" is true");
         break;
       }
