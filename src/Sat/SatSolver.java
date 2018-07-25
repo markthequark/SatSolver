@@ -46,15 +46,11 @@ public class SatSolver {
 
           List<Literal> unknownLiterals = clause.unknownLiterals(atomValues);
           if (unknownLiterals.size() == 0) {
-            if (clause.isSatisfied(atomValues)) {
-              continue;
-            } else {
-              // if here, clause evaluates to false
-              // undoes previous atom-value guess, and makes a new one
-              System.out.println("reversing guess of " + guessTree.getAtom() + "=" + guessTree.getValue());
-              guessTree = guessTree.reverseGuess(atomValues, implicationGraph);
-              continue main;
-            }
+            // if here, clause evaluates to false
+            // undoes previous atom-value guess, and makes a new one
+            System.out.println("reversing guess of " + guessTree.getAtom() + "=" + guessTree.getValue());
+            guessTree = guessTree.reverseGuess(atomValues, implicationGraph);
+            continue main;
           }
           if (unknownLiterals.size() == 1) {
             // if here, can determine last atom in clause via unit propagation
