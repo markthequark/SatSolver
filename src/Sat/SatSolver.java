@@ -41,7 +41,8 @@ public class SatSolver {
       unitPropagation:
       while (true) {
         for (Clause clause : formula) {
-          if (clause.isSatisfied() || clause.isSatisfied(atomValues))
+          clause.update(atomValues);
+          if (clause.isSatisfied())
             continue;
 
           List<Literal> unknownLiterals = clause.unknownLiterals(atomValues);
@@ -60,7 +61,6 @@ public class SatSolver {
               atomValues.put(unknownLiteral.getAtom(), false);
             else
               atomValues.put(unknownLiteral.getAtom(), true);
-            clause.setSatisfied(true);
             continue unitPropagation;
           }
         }

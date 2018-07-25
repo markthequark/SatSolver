@@ -31,14 +31,13 @@ public class Clause extends HashSet<Literal> {
   }
 
   /**
-   * Determines if this clause is satisfied according to the passed atom values.
-   * This will modify the satisfied field to equal the return value.
+   * Updates the satisfied field to reflect if this clause is
+   * satisfied according to the passed atom values.
    *
    * @param atomValues A map of atom->value pairs
-   * @return true if this clause is satisfied, false otherwise
    */
-  public boolean isSatisfied(Map<Atom, Boolean> atomValues) {
-    return this.satisfied = this.stream()
+  public void update(Map<Atom, Boolean> atomValues) {
+    this.satisfied = this.stream()
         .anyMatch(literal ->
             atomValues.getOrDefault(literal.getAtom(), literal.isNegated()) == !literal.isNegated());
   }
