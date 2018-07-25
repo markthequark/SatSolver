@@ -17,8 +17,8 @@ public class Literal {
   private boolean negated;
 
   /**
-   * @param atom    the Sat.Atom this Sat.Literal refers to
-   * @param negated if this variable is negated, e.g. ¬a
+   * @param atom    the Atom this Literal refers to
+   * @param negated true if this Literal is negated, e.g. ¬A
    */
   private Literal(Atom atom, boolean negated) {
     this.atom = atom;
@@ -27,10 +27,23 @@ public class Literal {
     Literal.allLiterals.put(Objects.hash(atom, negated), this);
   }
 
+  /**
+   * Creates a positive Literal
+   *
+   * @param name the name of the atom this literal refers to
+   * @return The created Literal
+   */
   public static Literal createLiteral(String name) {
     return createLiteral(name, false);
   }
 
+  /**
+   * Creates a new Literal
+   *
+   * @param name    the name of the atom this literal refers to
+   * @param negated true if a negative literal. e.g. ¬A
+   * @return The created Literal
+   */
   public static Literal createLiteral(String name, boolean negated) {
     Atom atom = Atom.createAtom(name);
     Literal literal = allLiterals.get(Objects.hash(atom, negated));

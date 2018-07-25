@@ -3,8 +3,19 @@ package Sat;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A {@link List} of {@link Clause}(s) AND'd together <Br>
+ * (¬A or B) and (A or B) and (A or ¬B) etc...
+ */
 public class Formula extends ArrayList<Clause> {
 
+  /**
+   * add a Stringly-typed clause to this formula <br>
+   * e.g. formula.addClause("A", "¬B", "C");
+   *
+   * @param literals A String varargs representing Literals. <Br>
+   *                 negative Literals should begin with ¬ e.g. "¬A", "¬x1"
+   */
   public void addClause(String... literals) {
     List<Literal> literalList = new ArrayList<>();
     for (String id : literals) {

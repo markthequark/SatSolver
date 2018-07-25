@@ -15,11 +15,22 @@ public class Atom {
 
   public final String id;
 
+  /**
+   * Creates a new atom and adds it to the map of all instantiated atoms
+   *
+   * @param name The unique name of the atom
+   */
   private Atom(String name) {
     this.id = name;
     Atom.allAtoms.put(name, this);
   }
 
+  /**
+   * Creates a new atom
+   *
+   * @param name The unique name of the atom
+   * @return The created Atom
+   */
   public static Atom createAtom(String name) {
     Atom atom = allAtoms.get(name);
     return atom == null ? new Atom(name) : atom;

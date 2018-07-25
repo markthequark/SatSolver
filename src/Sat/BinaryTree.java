@@ -8,14 +8,19 @@ import java.util.LinkedList;
 import java.util.Map;
 
 /**
- * leaf nodes with value false are assigned to left.
- * leaf nodes with value true are assigned to right.
+ * A tree data structure to keep track of the atom-value guesses which have been made
  * <p>
- * nodes hold an atom, and it's associated value guess
+ * child nodes with value false are assigned to the left of it's parent <br>
+ * child nodes with value true are assigned to the right of it's parent <br>
+ * <p>
+ * nodes hold an atom, and it's associated value guess <br>
  * both child nodes of a single parent must have the same atom, this is enforced
  */
 public class BinaryTree {
 
+  /**
+   * A pointer to the root of this tree
+   */
   @NotNull
   public final BinaryTree root;
 
@@ -30,19 +35,31 @@ public class BinaryTree {
   // when true, all children branching from this node produces an unsatisfiable formula
   private boolean unsat = false;
 
+  /**
+   * Creates a new binary tree. <Br>
+   * The returned BinaryTree points to it's root.
+   */
   public BinaryTree() {
     this.root = this;
     this.parent = null;
-    this.atom = atom;
   }
 
-  public BinaryTree(BinaryTree parent, Atom atom, boolean value) {
+  private BinaryTree(BinaryTree parent, Atom atom, boolean value) {
     this.root = parent.root;
     this.parent = parent;
     this.atom = atom;
     this.value = value;
   }
 
+  /**
+   * Creates a new child node on this node and returns a pointer to that child <br>
+   *
+   * @param atom  The atom contained in this new node
+   * @param value The value of the atom contained in this new node
+   * @return a A pointer to the newly created child node
+   * @throws InvalidStateException if this node already had a child with a different atom.
+   *                               (both child nodes of a parent node must have the same atom)
+   */
   public BinaryTree addChild(Atom atom, boolean value) {
     BinaryTree result;
     if (value)
@@ -58,7 +75,24 @@ public class BinaryTree {
     return result;
   }
 
-  public BinaryTree reverseGuess(Map<Atom, Boolean> knownValues, ImplicationGraph implicationGraph) {
+  /**
+   * Sets the unsat field of this node to true <br>
+   * Attempts to reverse the guess of the parent, and returns a pointer to the tree
+   * at the new child, with the new guess. <br>
+   * If both children of the parent node leads to an unsat node, then attempts to
+   * reverse the guess of the parent of the parent, recursively.
+   * <p>
+   * If reverseGuess is called on the root of a tree, the root node will be returned,
+   * after setting the root node unsat field to true.
+   *
+   * @param atomValues       The map of atom-value pairs. This will be modified to not
+   *                         conflict with the reversed guess
+   * @param implicationGraph The graph of implied atom-value pairs, This will be
+   *                         modified to not conflict with the reversed guess
+   * @return A pointer to the tree at the new guess. Or a pointer to the root node if
+   * all guesses lead to an unsat node.
+   */
+  public BinaryTree reverseGuess(Map<Atom, Boolean> atomValues, ImplicationGraph implicationGraph) {
     this.unsat = true;
     if (this == this.root)
       return this;
@@ -69,12 +103,12 @@ public class BinaryTree {
     Atom atom = this.atom;
     while (true) {
       while (implicationGraph.implies.containsKey(atom)
-          && implicationGraph.implies.get(atom).size()>0) {
+          && implicationGraph.implies.get(atom).size() > 0) {
         atom = implicationGraph.implies.get(atom).get(0);
         impliedAtoms.add(atom);
       }
       // remove from map
-      knownValues.remove(atom);
+      atomValues.remove(atom);
       // remove from local list
       impliedAtoms.pollLast();
       // remove from graph
@@ -89,11 +123,11 @@ public class BinaryTree {
 
     // guess other value
     if ((value && parent.left == null) || (!value && parent.right == null)) {
-      knownValues.put(this.atom, !value);
+      atomValues.put(this.atom, !value);
       return parent.addChild(this.atom, !value);
     }
     // else if both values determined to be unsat, reverse guess of parent
-    return parent.reverseGuess(knownValues, implicationGraph);
+    return parent.reverseGuess(atomValues, implicationGraph);
   }
 
   public boolean isUnsat() {

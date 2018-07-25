@@ -4,7 +4,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * A {@link Set} of {@link Literal}s OR'd together <Br>
+ * A {@link Set} of {@link Literal}(s) OR'd together <Br>
  * (¬A or B or C or ¬D) etc...
  */
 public class Clause extends HashSet<Literal> {
@@ -12,6 +12,11 @@ public class Clause extends HashSet<Literal> {
   // clause is satisfied when one of it's literals evaluates to true
   private boolean satisfied = false;
 
+  /**
+   * Creates a new clause
+   *
+   * @param collection The literals this clause contains
+   */
   public Clause(Collection<? extends Literal> collection) {
     super(collection);
   }
@@ -63,9 +68,5 @@ public class Clause extends HashSet<Literal> {
 
   public boolean isSatisfied() {
     return satisfied;
-  }
-
-  public void setSatisfied(boolean satisfied) {
-    this.satisfied = satisfied;
   }
 }
