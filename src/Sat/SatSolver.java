@@ -37,17 +37,12 @@ public class SatSolver {
       unitPropagation: // loop allows multiple atoms to be determined via unit propagation
       while (true) {
         for (Clause clause : formula) {
-          if (clause.isSatisfied())
+          if (clause.isSatisfied() || clause.isSatisfied(atomValues))
             continue;
-          if (clause.checkIfSat(atomValues)) {
-            clause.setSatisfied(true);
-            continue;
-          }
 
           List<Literal> unknownLiterals = clause.unknownLiterals(atomValues);
           if (unknownLiterals.size() == 0) {
-            if (clause.checkIfSat(atomValues)) {
-              clause.setSatisfied(true);
+            if (clause.isSatisfied(atomValues)) {
               continue;
             } else {
               // if here, clause evaluates to false
