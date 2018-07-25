@@ -1,8 +1,8 @@
 package Sat;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.TreeMap;
 
 /**
  * A propositional variable. <br>
@@ -10,14 +10,13 @@ import java.util.TreeMap;
  */
 public class Atom {
 
-  // TreeMap of (K:id, V:atom) keys ordered by their hashcode
-  private static Map<String, Atom> allAtoms = new TreeMap<>();
+  // Map of (K:id, V:atom)
+  private static Map<String, Atom> allAtoms = new HashMap<>();
 
   public final String id;
 
   private Atom(String name) {
     this.id = name;
-
     Atom.allAtoms.put(name, this);
   }
 
