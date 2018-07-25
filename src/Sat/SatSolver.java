@@ -49,7 +49,7 @@ public class SatSolver {
           if (unknownLiterals.size() == 0) {
             // if here, clause evaluates to false
             // undoes previous atom-value guess, and makes a new one
-            System.out.println("reversing guess of " + guessTree.getAtom() + "=" + guessTree.getValue());
+            System.out.println("reversing guess of\t" + guessTree.getAtom() + " = " + guessTree.getValue());
             guessTree = guessTree.reverseGuess(atomValues, implicationGraph);
             continue main;
           }
@@ -57,10 +57,13 @@ public class SatSolver {
             // if here, can determine last atom in clause via unit propagation
             Literal unknownLiteral = unknownLiterals.get(0);
             implicationGraph.implies(clause, unknownLiteral.getAtom());
-            if (unknownLiteral.isNegated())
+            if (unknownLiteral.isNegated()) {
               atomValues.put(unknownLiteral.getAtom(), false);
-            else
+              System.out.println("unit propagation:\t" + unknownLiteral.getAtom().id + " = false");
+            } else {
               atomValues.put(unknownLiteral.getAtom(), true);
+              System.out.println("unit propagation:\t" + unknownLiteral.getAtom().id + " = true");
+            }
             continue unitPropagation;
           }
         }
@@ -78,7 +81,7 @@ public class SatSolver {
         Atom unknownAtom = clause.unknownLiterals(atomValues).get(0).getAtom();
         guessTree = guessTree.addChild(unknownAtom, true);
         atomValues.put(unknownAtom, true);
-        System.out.println("guessing " + unknownAtom + " is true");
+        System.out.println("guessing:\t\t\t" + unknownAtom + " = true");
         break;
       }
     }
