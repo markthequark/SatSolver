@@ -68,7 +68,8 @@ public class BinaryTree {
     impliedAtoms.add(atom);
     Atom atom = this.atom;
     while (true) {
-      while (implicationGraph.implies.containsKey(atom)) {
+      while (implicationGraph.implies.containsKey(atom)
+          && implicationGraph.implies.get(atom).size()>0) {
         atom = implicationGraph.implies.get(atom).get(0);
         impliedAtoms.add(atom);
       }
