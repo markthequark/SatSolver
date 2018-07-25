@@ -72,13 +72,9 @@ public class SatSolver {
         break;
       }
 
-      checkSolved:
-      while (true) {
-        for (Clause clause : formula)
-          if (!clause.isSatisfied())
-            break checkSolved;
+      // check for solved state
+      if (formula.stream().allMatch(Clause::isSatisfied))
         return true;
-      }
 
       // cannot continue with unit propagation, therefor, pick & guess a variable
       for (Clause clause : formula) {
