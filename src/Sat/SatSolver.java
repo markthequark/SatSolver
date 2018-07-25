@@ -60,24 +60,13 @@ public class SatSolver {
           if (unknownLiterals.size() == 1) {
             // if here, can determine last atom in clause via unit propagation
             Literal unknownLiteral = unknownLiterals.get(0);
-            if (atomValues.containsKey(unknownLiteral.getAtom())) {
-              //TODO: check if possible
-              System.out.println("ERROR SHOULD NEVER OCCUR");
-              // if here, clause evaluates to false
-              // undoes previous atom-value guess, and makes a new one
-              guessTree.reverseGuess(atomValues, implicationGraph);
-              continue main;
-            } else {
-              // no conflict
-              System.out.println("unit propagation, " + clause + " with " + atomValues);
-              implicationGraph.implies(clause, unknownLiteral.getAtom());
-              if (unknownLiteral.isNegated())
-                atomValues.put(unknownLiteral.getAtom(), false);
-              else
-                atomValues.put(unknownLiteral.getAtom(), true);
-              clause.setSatisfied(true);
-              continue unitPropagation;
-            }
+            implicationGraph.implies(clause, unknownLiteral.getAtom());
+            if (unknownLiteral.isNegated())
+              atomValues.put(unknownLiteral.getAtom(), false);
+            else
+              atomValues.put(unknownLiteral.getAtom(), true);
+            clause.setSatisfied(true);
+            continue unitPropagation;
           }
         }
         break;
