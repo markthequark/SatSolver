@@ -74,7 +74,7 @@ public class SatSolver {
       if (formula.stream().allMatch(Clause::isSatisfied))
         return true;
 
-      // cannot continue with unit propagation, therefor, pick & guess a variable
+      // cannot continue with unit propagation, therefore, pick & guess a variable
       for (Clause clause : formula) {
         if (clause.isSatisfied())
           continue;
