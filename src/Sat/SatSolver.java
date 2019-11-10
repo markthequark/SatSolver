@@ -57,13 +57,19 @@ public class SatSolver {
             // if here, can determine last atom in clause via unit propagation
             Literal unknownLiteral = unknownLiterals.get(0);
             implicationGraph.implies(clause, unknownLiteral.getAtom());
-            if (unknownLiteral.isNegated()) {
-              atomValues.put(unknownLiteral.getAtom(), false);
-              System.out.println("unit propagation:\t" + unknownLiteral.getAtom().id + " = false");
-            } else {
-              atomValues.put(unknownLiteral.getAtom(), true);
-              System.out.println("unit propagation:\t" + unknownLiteral.getAtom().id + " = true");
-            }
+            
+            atomValues.put(unknownLiteral.getAtom(), !unknownLiteral.isNegated());
+            System.out.println("unit propagation:\t" + unknownLiteral.getAtom().id + " = " + !unknownLiteral.isNegated());
+
+//            perhaps a more readable variation of the above code is:
+//             if (unknownLiteral.isNegated()) {
+//               atomValues.put(unknownLiteral.getAtom(), false);
+//               System.out.println("unit propagation:\t" + unknownLiteral.getAtom().id + " = false");
+//             } else {
+//               atomValues.put(unknownLiteral.getAtom(), true);
+//               System.out.println("unit propagation:\t" + unknownLiteral.getAtom().id + " = true");
+//             }
+            
             continue unitPropagation;
           }
         }
