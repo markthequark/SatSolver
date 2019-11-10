@@ -10,7 +10,7 @@ import java.util.Objects;
  */
 public class Literal {
 
-  // map (K: Objects.hash(Sat.Atom:atom, bool:negated) , V:Sat.Literal)
+  // map (K: Objects.hash(literal) , V:literal)
   private static Map<Integer, Literal> allLiterals = new HashMap<>();
 
   private Atom atom;
@@ -24,11 +24,11 @@ public class Literal {
     this.atom = atom;
     this.negated = negated;
 
-    Literal.allLiterals.put(Objects.hash(atom, negated), this);
+    allLiterals.put(Objects.hash(atom, negated), this);
   }
 
   /**
-   * Creates a positive Literal
+   * Creates a non-negated Literal
    *
    * @param name the name of the atom this literal refers to
    * @return The created Literal
@@ -41,7 +41,7 @@ public class Literal {
    * Creates a new Literal
    *
    * @param name    the name of the atom this literal refers to
-   * @param negated true if a negative literal. e.g. ¬A
+   * @param negated true for a negated literal. e.g. ¬A
    * @return The created Literal
    */
   public static Literal createLiteral(String name, boolean negated) {
