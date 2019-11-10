@@ -10,7 +10,7 @@ import java.util.Objects;
  */
 public class Literal {
 
-  // map (K: Objects.hash(literal) , V:literal)
+  // map (K:literal.hashCode(), V:literal)
   private static Map<Integer, Literal> allLiterals = new HashMap<>();
 
   private Atom atom;
