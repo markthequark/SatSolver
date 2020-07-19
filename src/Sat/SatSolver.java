@@ -5,17 +5,31 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/** 
+ * Java implementation of the DPLL algorithm for solving the boolean satisfiability problem.
+ * https://en.wikipedia.org/wiki/DPLL_algorithm
+ */
 public class SatSolver {
+  
+  /**
+   * Example usage of algorithm
+   */
   public static void main(String[] args) {
 
+    /* Create a Formula representing the boolean expression:
+    
+       (A V B V ¬C) ^ (¬A V ¬B V C) ^ (¬B V C V D)
+       
+       alternatively written as:
+       
+       AND(OR(A, B, NOT C),
+           OR(NOT A, NOT B, C),
+           OR(NOT B, C, D))
+    */
     Formula f1 = new Formula();
     f1.addClause("A", "B", "¬C");
-    f1.addClause("C", "D", "¬B");
-    f1.addClause("¬A", "E", "F");
-    f1.addClause("B", "¬C", "¬F");
-    f1.addClause("¬C", "¬E", "¬F");
-    f1.addClause("A", "¬B", "E");
     f1.addClause("¬A", "¬B", "C");
+    f1.addClause("¬B", "C", "D");
 
     boolean result = SatSolver.solve(f1);
     System.out.println("Satisfiability: " + result);
@@ -61,7 +75,7 @@ public class SatSolver {
             atomValues.put(unknownLiteral.getAtom(), !unknownLiteral.isNegated());
             System.out.println("unit propagation:\t" + unknownLiteral.getAtom().id + " = " + !unknownLiteral.isNegated());
 
-//            perhaps a more readable variation of the above code is:
+//            perhaps a more readable variation of the above 2 lines is:
 //             if (unknownLiteral.isNegated()) {
 //               atomValues.put(unknownLiteral.getAtom(), false);
 //               System.out.println("unit propagation:\t" + unknownLiteral.getAtom().id + " = false");
